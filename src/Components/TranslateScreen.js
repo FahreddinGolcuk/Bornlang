@@ -19,19 +19,45 @@ import {mainPurple,darkBlack, lowOpacityPurple} from '../Colors'
 import { connect } from 'react-redux'
 import Database from '../../Database';
 import {add_favorite} from '../../actions'
+import ImagePicker from 'react-native-image-picker';
+import Ocr from 'react-native-tesseract-ocr'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
 const { height, width } = Dimensions.get('window')
-
+const tessOptions = {
+  whitelist: null,
+  blacklist: '1234567890\'!"#$%&/()={}[]+*-_:;<>'
+};
 
 class TranslateScreen extends React.Component {
   state = {
+    phototext:'',
     text: '',
     result: '',
     sourceLang: Langs[0],
     targetLang: Langs[1],
     isFavorite : false
   }
+  handleChoosePhoto = () => {
+    const options = {
+      noData: true
+    };
+    ImagePicker.launchImageLibrary(options, response => {
+      if (response.uri) {
+        this.extractText(response.path)
+      }
+    })
+  }
 
+  extractText = (imgpath) => {
+    Ocr.recognize(imgpath, 'LANG_ENGLISH', tessOptions)
+      .then((res) => {
+        this.setState({ phototext: res }) })
+      .then(()=>{
+        this.translate(this.state.phototext)
+      })
+      .done()
+  }
   controlIsFavorite = () =>{
     this.props.FavoritesRedux.forEach(val=>{
       if(val.source_text===this.state.text && val.target_text === this.state.result[0]){
@@ -116,8 +142,21 @@ class TranslateScreen extends React.Component {
               >
                 {this.GetAllLangItems()}
               </Picker>
+              <TouchableOpacity
+            
+            onPress = {()=>this.handleChoosePhoto()}
+            >
+              <MaterialCommunityIcons
+              name = 'image-filter-center-focus-weak'
+              size={width/13}
+              color={darkBlack}
+              />
+              <Text style={{color:mainPurple,fontSize:10}}>Photo to text</Text>
+              <Text style={{color:lowOpacityPurple,fontSize:7}}>Only supported to english character.</Text>
+            </TouchableOpacity>
             </View>
             <TextInput
+            defaultValue = {this.state.phototext}
               placeholder='Enter word here'
               placeholderTextColor={lowOpacityPurple}
               multiline={true}
@@ -197,6 +236,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   exchangeLangWidget: {
+    transform: [{rotate:4.7}],
     width: width / 10,
     height: width / 10,
     borderRadius: 180,

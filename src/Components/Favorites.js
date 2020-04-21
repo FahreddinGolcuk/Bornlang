@@ -60,7 +60,7 @@ class Favorites extends React.Component {
           keyExtractor={(index) => index.toString()}
           renderItem={({ item, index }) =>
             <View style={{
-              borderLeftWidth: 5,
+              borderLeftWidth: 3,
               borderLeftColor: colors[index % colors.length],
               width: '95%',
               alignSelf:'center',

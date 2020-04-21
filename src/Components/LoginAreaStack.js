@@ -12,7 +12,7 @@ class LoginAreaStack extends React.Component {
     render() {
         return (
             <NavigationContainer>
-                <Stack.Navigator initialRouteName='Home'>
+                <Stack.Navigator initialRouteName='Tabbar'>
                     <Stack.Screen name="Home" component={Home} options={{headerShown:false}}/>
                     <Stack.Screen name="Register" component={RegisterScreen} options={{headerTitleStyle:{display:'none'},headerTintColor:'#A65ECC',headerStyle:{elevation:0}}} />
                     <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{headerTitleStyle:{display:'none'},headerTintColor:'#A65ECC',headerStyle:{elevation:0}}} />
