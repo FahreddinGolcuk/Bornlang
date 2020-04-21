@@ -1,0 +1,20 @@
+export const Langs = [
+    { short: 'tr', name: 'Turkish', flag: require('./images/flags/tr.png') },
+    { short: 'en', name: 'English', flag: require('./images/flags/en.png') },
+    { short: 'az', name: 'Azerbaijan', flag: require('./images/flags/az.png') },
+    { short: 'ar', name: 'Arabic', flag: require('./images/flags/ar.png') },
+    { short: 'bg', name: 'Bulgarian', flag: require('./images/flags/bg.png') },
+    { short: 'hu', name: 'Hungarian', flag: require('./images/flags/hu.png') },
+    { short: 'el', name: 'Greek', flag: require('./images/flags/el.png') },
+    { short: 'it', name: 'Italian', flag: require('./images/flags/it.png') },
+    { short: 'ko', name: 'Korean', flag: require('./images/flags/ko.png') },
+    { short: 'es', name: 'Spanish', flag: require('./images/flags/es.png') },
+    { short: 'zh', name: 'Chinese', flag: require('./images/flags/zn.png') },
+    { short: 'hi', name: 'Hindi', flag: require('./images/flags/hi.png') },
+    { short: 'fr', name: 'French', flag: require('./images/flags/fr.png') },
+    { short: 'cs', name: 'Czech', flag: require('./images/flags/cs.png') },
+    { short: 'ru', name: 'Russian', flag: require('./images/flags/ru.png') },
+    { short: 'pt', name: 'Portuguese', flag: require('./images/flags/pt.png') },
+    { short: 'de', name: 'German', flag: require('./images/flags/de.png') },
+    { short: 'pl', name: 'Polish', flag: require('./images/flags/pl.png') }
+  ]
