@@ -17,6 +17,9 @@
 Uygulama ilk açıldığında uygulamaya giriş yapma ekranı gelmektedir.
 Bu ekran üzerinden şifre sıfırlama ve yeni kayıt oluşturma ekranlarına geçiş yapılabilir.
 </h5>
+<h5>
+  **Uygulamayı kullanabilmek için kayıt olmanız gereklidir**
+</h5>
 <p float="left">
 <img src="/src/images/github/1.jpeg" width="250" height="500">
 <img src="/src/images/github/2.jpeg" width="250" height="500">
