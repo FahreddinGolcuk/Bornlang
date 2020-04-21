@@ -11,17 +11,28 @@ import {
   Image,
   Alert
 } from 'react-native';
-import {Picker} from '@react-native-community/picker';
+
+import { Picker } from '@react-native-community/picker';
+
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+
+
 import { Langs } from '../Langs'
-import {mainPurple,darkBlack, lowOpacityPurple} from '../Colors'
+
+import { mainPurple, darkBlack, lowOpacityPurple } from '../Colors'
+
 import { connect } from 'react-redux'
+
 import Database from '../../Database';
-import {add_favorite} from '../../actions'
+
+import { add_favorite } from '../../actions'
+
 import ImagePicker from 'react-native-image-picker';
+
 import Ocr from 'react-native-tesseract-ocr'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+
 
 const { height, width } = Dimensions.get('window')
 const tessOptions = {
@@ -31,12 +42,12 @@ const tessOptions = {
 
 class TranslateScreen extends React.Component {
   state = {
-    phototext:'',
+    phototext: '',
     text: '',
     result: '',
     sourceLang: Langs[0],
     targetLang: Langs[1],
-    isFavorite : false
+    isFavorite: false,
   }
   handleChoosePhoto = () => {
     const options = {
@@ -52,22 +63,22 @@ class TranslateScreen extends React.Component {
   extractText = (imgpath) => {
     Ocr.recognize(imgpath, 'LANG_ENGLISH', tessOptions)
       .then((res) => {
-        this.setState({ phototext: res }) })
-      .then(()=>{
+        this.setState({ phototext: res })
+      })
+      .then(() => {
         this.translate(this.state.phototext)
       })
-      .done()
   }
-  controlIsFavorite = () =>{
-    this.props.FavoritesRedux.forEach(val=>{
-      if(val.source_text===this.state.text && val.target_text === this.state.result[0]){
-        this.setState({isFavorite:true})
+  controlIsFavorite = () => {
+    this.props.FavoritesRedux.forEach(val => {
+      if (val.source_text === this.state.text && val.target_text === this.state.result[0]) {
+        this.setState({ isFavorite: true })
       }
     })
   }
   translate = async (val) => {
     this.setState({
-      isFavorite:false,
+      isFavorite: false,
       text: val
     }, () => {
       fetch(`https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20200409T112813Z.51e32dafd3434153.e26c85ce392e6b0d11325bb820798aedd67ddc8f&text=
@@ -84,8 +95,8 @@ class TranslateScreen extends React.Component {
     })
   }
 
-  addFavorites = async() => {
-    if(!this.state.isFavorite){
+  addFavorites = async () => {
+    if (!this.state.isFavorite) {
       var object = `{"source_text":"${this.state.text}","target_text":"${this.state.result[0]}","source_flag":${this.state.sourceLang.flag},"target_flag":${this.state.targetLang.flag}}`
       object = JSON.parse(object)
       var newFavID = await Database.shared.addFavorites(object)
@@ -94,7 +105,7 @@ class TranslateScreen extends React.Component {
       this.props.addFavorites(object)
       this.controlIsFavorite()
       Alert.alert('Add to favorites with successfully')
-    }else Alert.alert('This translate already added to favorites')
+    } else Alert.alert('This translate already added to favorites')
   }
 
   exchangeLangs = () => {
@@ -108,7 +119,7 @@ class TranslateScreen extends React.Component {
     this.translate(this.state.text)
   }
 
-  GetAllLangItems = () =>{
+  GetAllLangItems = () => {
     return Object.keys(Langs).map((key, index) => {
       return (
         <Picker.Item label={Langs[index].name} value={Langs[index]} key={Langs[index].short} />
@@ -118,14 +129,14 @@ class TranslateScreen extends React.Component {
 
   render() {
     return (
-      <SafeAreaView style={{ alignItems: 'center', flex: 1,backgroundColor:'white' }}>
+
+      <SafeAreaView style={{ alignItems: 'center', flex: 1, backgroundColor: 'white' }}>
         <Image
-        source={require('../images/Header-images.png')}
-        style={{width:width/3,height:width/3,margin:8}}
-        resizeMode='contain'
+          source={require('../images/Header-images.png')}
+          style={{ width: width / 3, height: width / 3, margin: 8 }}
+          resizeMode='contain'
         />
         <View style={styles.translateContainer}>
-
           <View style={{ width: '90%' }}>
             <View style={styles.pickerFlagContainer}>
               <Image
@@ -143,20 +154,20 @@ class TranslateScreen extends React.Component {
                 {this.GetAllLangItems()}
               </Picker>
               <TouchableOpacity
-            
-            onPress = {()=>this.handleChoosePhoto()}
-            >
-              <MaterialCommunityIcons
-              name = 'image-filter-center-focus-weak'
-              size={width/13}
-              color={darkBlack}
-              />
-              <Text style={{color:mainPurple,fontSize:10}}>Photo to text</Text>
-              <Text style={{color:lowOpacityPurple,fontSize:7}}>Only supported to english character.</Text>
-            </TouchableOpacity>
+                style={{alignItems:'center'}}
+                onPress={() => this.handleChoosePhoto()}
+              >
+                <MaterialCommunityIcons
+                  name='image-filter-center-focus-weak'
+                  size={width / 13}
+                  color={darkBlack}
+                />
+                <Text style={{ color: mainPurple, fontSize: 10 }}>Photo to text (It may take a few minutes.)</Text>
+                <Text style={{ color: lowOpacityPurple, fontSize: 7 }}>Only supported to english character.</Text>
+              </TouchableOpacity>
             </View>
             <TextInput
-            defaultValue = {this.state.phototext}
+              defaultValue={this.state.phototext}
               placeholder='Enter word here'
               placeholderTextColor={lowOpacityPurple}
               multiline={true}
@@ -194,15 +205,15 @@ class TranslateScreen extends React.Component {
                 {this.GetAllLangItems()}
               </Picker>
             </View>
-            <ScrollView style={{ maxHeight: height>600?height/ 5:height/7 }}>
+            <ScrollView style={{ maxHeight: height > 600 ? height / 5 : height / 7 }}>
               <Text style={{ color: darkBlack, fontWeight: 'bold', fontSize: 20 }}>{this.state.result}</Text>
             </ScrollView>
             <TouchableOpacity
               style={styles.favoriteWidget}
-              onPress = {()=>this.addFavorites()}
+              onPress={() => this.addFavorites()}
             >
               <MaterialIcons
-                name={this.state.isFavorite==false?'favorite-border':'favorite'}
+                name={this.state.isFavorite == false ? 'favorite-border' : 'favorite'}
                 color={mainPurple}
                 size={36}
               />
@@ -225,7 +236,7 @@ class TranslateScreen extends React.Component {
 const styles = StyleSheet.create({
   translateContainer: {
     width: '100%',
-    height: height>600?height/ 1.4:height/1.6,
+    height: height > 600 ? height / 1.4 : height / 1.6,
     borderRadius: 5,
     backgroundColor: 'white',
     shadowColor: '#000',
@@ -236,7 +247,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   exchangeLangWidget: {
-    transform: [{rotate:4.7}],
+    transform: [{ rotate: 4.7 }],
     width: width / 10,
     height: width / 10,
     borderRadius: 180,
@@ -262,7 +273,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
     marginTop: 'auto',
-    marginBottom:4
+    marginBottom: 4
   },
   yandexText: {
     color: mainPurple,
@@ -283,18 +294,18 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: mainPurple,
     fontWeight: 'bold',
-    maxHeight: height>600?height/ 5:height/7 
+    maxHeight: height > 600 ? height / 5 : height / 7
   }
 })
 
 function mapStateToProps(state) {
   return {
-      FavoritesRedux: state.FavoritesRedux
+    FavoritesRedux: state.FavoritesRedux
   }
 }
 function mapDispatchToProps(dispatch) {
   return {
-      addFavorites: (newObject) => dispatch({ type: add_favorite, NewItem: newObject })
+    addFavorites: (newObject) => dispatch({ type: add_favorite, NewItem: newObject })
   }
 }
 
